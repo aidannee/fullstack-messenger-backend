@@ -23,11 +23,14 @@ app.get("/messages", (req, res) => {
 });
 
 app.post("/messages", (req, res) => {
-  console.log(req.body);
-  const newDoc = { ...req.body, id: uuidv4(), created_at: Date.now() };
-  console.log("newDoc created", newDoc);
-  messages.push(newDoc);
-  res.status(201).json(newDoc);
+  if (!req.body.username || !req.body.content) {
+    res.status(400).send("username and content are required");
+  } else {
+    const newDoc = { ...req.body, id: uuidv4(), created_at: Date.now() };
+    console.log("newDoc created", newDoc);
+    messages.push(newDoc);
+    res.status(201).json(newDoc);
+  }
 });
 
 app.put("/messages/:id", (req, res) => {
